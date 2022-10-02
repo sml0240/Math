@@ -1,5 +1,24 @@
 #pragma once
 
+enum class Direction
+{
+	UP = 0,
+	DOWN,
+	LEFT,
+	RIGHT,
+	FORWARD,
+	BACKWARD,
+};
+enum class Axis
+{
+	X,
+	Y,
+	Z,
+};
+
+#include "vector3.h"
+#include "mat4.h"
+
 #define M_RADPI        57.295779513082
 #define PI            3.14159265358979323846
 #define DEG2RAD(x)    ((float)(x) * (float)((float)(PI) / 180.0f))
