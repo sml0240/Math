@@ -77,7 +77,7 @@ public:
 		int mrow;
 		Mat4* mat;
 		float& operator[](int col) { return mat->mat[mrow][col]; }
-		//int operator-> () { return this->mrow; }
+		int operator-> () { return this->mrow; }
 	};
 
 	void operator+= (Mat4 &other)
@@ -92,22 +92,16 @@ public:
 	}
 
 	Vector3f operator* (Vector3f& other)
-	{
-		//Vector4 other(vec);
-		
+	{	
 		Vector3f ret;
 		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
 		ret.y = (this->mat[1][0] * other.x) + (this->mat[1][1] * other.y) + (this->mat[1][2] * other.z);
 		ret.z = (this->mat[2][0] * other.x) + (this->mat[2][1] * other.y) + (this->mat[2][2] * other.z);
-		//ret.w = (this->mat[3][0] * other.x) + (this->mat[3][1] * other.y) + (this->mat[3][2] * other.z) + (this->mat[3][3] * other.w);
 		return ret;
 	}
 
 	Vector3i operator* (Vector3i& other)
 	{
-		//other.PrintSelf();
-		//this->PrintSelf();
-
 		Vector3f ret;
 		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
 		ret.y = (this->mat[1][0] * other.x) + (this->mat[1][1] * other.y) + (this->mat[1][2] * other.z);
@@ -118,10 +112,10 @@ public:
 	Vector4 operator* (Vector4& other)
 	{
 		Vector4 ret;
-		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z) + (this->mat[0][3] * other.w);
-		ret.y = (this->mat[1][0] * other.x) + (this->mat[1][1] * other.y) + (this->mat[1][2] * other.z) + (this->mat[1][3] * other.w);
-		ret.z = (this->mat[2][0] * other.x) + (this->mat[2][1] * other.y) + (this->mat[2][2] * other.z) + (this->mat[2][3] * other.w);
-		ret.w = (this->mat[3][0] * other.x) + (this->mat[3][1] * other.y) + (this->mat[3][2] * other.z) + (this->mat[3][3] * other.w);
+		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
+		ret.y = (this->mat[1][0] * other.x) + (this->mat[1][1] * other.y) + (this->mat[1][2] * other.z);
+		ret.z = (this->mat[2][0] * other.x) + (this->mat[2][1] * other.y) + (this->mat[2][2] * other.z);
+		ret.w = (this->mat[3][0] * other.x) + (this->mat[3][1] * other.y) + (this->mat[3][2] * other.z);
 
 		return ret;
 	}
@@ -143,6 +137,7 @@ public:
 		}
 		return ret;
 	}
+	
 	void operator*= (const Mat4& other)
 	{
 		for (int row = 0; row < 4; row++)
@@ -161,10 +156,9 @@ public:
 	Vector3f Xform(Vector3f& vec)
 	{
 		Vector3f ret;
-		ret.x = (this->mat[0][0] * vec.x) + (this->mat[1][0] * vec.y) + (this->mat[2][0] * vec.z);
-		ret.y = (this->mat[0][1] * vec.x) + (this->mat[1][1] * vec.y) + (this->mat[2][1] * vec.z);
-		ret.z = (this->mat[0][2] * vec.x) + (this->mat[1][2] * vec.y) + (this->mat[2][2] * vec.z);
-		ret += this->GetTranslation();
+		ret.x = ((this->mat[0][0] * vec.x) + (this->mat[1][0] * vec.y) + (this->mat[2][0] * vec.z) + this->mat[3][0]);
+		ret.y = ((this->mat[0][1] * vec.x) + (this->mat[1][1] * vec.y) + (this->mat[2][1] * vec.z) + this->mat[3][1]);
+		ret.z = ((this->mat[0][2] * vec.x) + (this->mat[1][2] * vec.y) + (this->mat[2][2] * vec.z) + this->mat[3][2]);
 		return ret;
 	}
 
@@ -175,6 +169,15 @@ public:
 		ret.y = (this->mat[0][1] * vec.x) + (this->mat[1][1] * vec.y) + (this->mat[2][1] * vec.z);
 		ret.z = (this->mat[0][2] * vec.x) + (this->mat[1][2] * vec.y) + (this->mat[2][2] * vec.z);
 		ret -= this->GetTranslation();
+		return ret;
+	}
+	Vector4 Xform(Vector4& vec)
+	{
+		Vector4 ret;
+		ret.x = ((this->mat[0][0] * vec.x) + (this->mat[1][0] * vec.y) + (this->mat[2][0] * vec.z) + this->mat[3][0]);
+		ret.y = ((this->mat[0][1] * vec.x) + (this->mat[1][1] * vec.y) + (this->mat[2][1] * vec.z) + this->mat[3][1]);
+		ret.z = ((this->mat[0][2] * vec.x) + (this->mat[1][2] * vec.y) + (this->mat[2][2] * vec.z) + this->mat[3][2]);
+		ret.w = ((this->mat[0][2] * vec.x) + (this->mat[1][2] * vec.y) + (this->mat[2][2] * vec.z) + this->mat[3][3]);
 		return ret;
 	}
 	Row operator[] (const int idx)
@@ -213,21 +216,19 @@ public:
 		*this *= rot;
 	}
 
-	void Scale(const Vector3f& scale) {
-		this->mat[0][0] *= scale.x;
-		this->mat[0][1] *= scale.x;
-		this->mat[0][2] *= scale.x;
-		this->mat[1][0] *= scale.y;
-		this->mat[1][1] *= scale.y;
-		this->mat[1][2] *= scale.y;
-		this->mat[2][0] *= scale.z;
-		this->mat[2][1] *= scale.z;
-		this->mat[2][2] *= scale.z;
+	Mat4 Scaled(const Vector3f& scale)
+	{
+		Mat4 ret;
+
+		ret[0][0] = scale.x;
+		ret[1][1] = scale.y;
+		ret[2][2] = scale.z;
+		ret[3][3] = 1.0f;
 	}
 	
 	void Scale(float scale) {
 		Mat4 scaled = CreateScaled(scale);
-		*this *= scaled;
+		(*this) *= scaled;
 	}
 
 	void SetDiagonal()
@@ -268,6 +269,7 @@ public:
 	{
 		return Vector4(this->mat[0][col], this->mat[1][col], this->mat[2][col], this->mat[3][col]);
 	}
+
 	void SetRow(uint8_t row, Vector3f& to)
 	{
 		this->mat[row][0] = to.x;
@@ -279,6 +281,20 @@ public:
 		this->mat[0][col] = to.x;
 		this->mat[1][col] = to.y;
 		this->mat[2][col] = to.z;
+	}
+	void SetRow4(uint8_t row, Vector4& to)
+	{
+		this->mat[row][0] = to.x;
+		this->mat[row][1] = to.y;
+		this->mat[row][2] = to.z;
+		this->mat[row][3] = to.w;
+	}
+	void SetCol4(uint8_t col, Vector4& to)
+	{
+		this->mat[0][col] = to.x;
+		this->mat[1][col] = to.y;
+		this->mat[2][col] = to.z;
+		this->mat[3][col] = to.w;
 	}
 	void SetTranslation(const Vector3f& pos)
 	{
@@ -325,7 +341,32 @@ public:
 		scaled.mat[3][3] = 1.0f;
 		return scaled;
 	}
-
+	// transposes this mat in place
+	void Transpose()
+	{
+		Mat4 result;
+		for (int l = 0; l < 4; l++)
+		{
+			for (int c = 0; c < 4; c++)
+			{
+				this->mat[l][c] = this->mat[c][l];
+			}
+		}
+	}
+	// returns a new transposed mat
+	Mat4 Transposed() const
+	{
+		Mat4 result;
+		for (int row = 0; row < 4; row++)
+		{
+			for (int col = 0; col < 4; col++)
+			{
+				result.mat[row][col] = this->mat[col][row];
+			}
+		}
+		return result;
+	}
+	
 	void To1DArray(float* arr)
 	{
 		for (size_t row = 0; row < 4; row++)
