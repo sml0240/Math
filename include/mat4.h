@@ -26,16 +26,6 @@ public:
 		return Vector4(this->x * other.x, this->y * other.y, this->z * other.z, this->w * other.w);
 	}
 
-	//Vector3 operator* (Vector3& other) { return Vector3(this->x * other.x, this->y * other.y, this->z * other.z); }
-	/*float Dot()
-	{
-		return x * x + y * y + z * z + w * w;
-	}
-
-	float Dot(Vector3f& other)
-	{
-		return x * other.x + y * other.y + z * other.z + w * w;
-	}*/
 	float Dot(Vector4& other)
 	{
 		return x * other.x + y * other.y + z * other.z + w * other.w;
@@ -43,7 +33,6 @@ public:
 
 	float x, y, z, w;
 };
-
 
 // vector * matrix
 // not matrix * vector
@@ -90,8 +79,8 @@ public:
 			}
 		}
 	}
-
-	Vector3f operator* (Vector3f& other)
+	
+	Vector3f operator* (const Vector3f& other)
 	{	
 		Vector3f ret;
 		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
@@ -100,16 +89,16 @@ public:
 		return ret;
 	}
 
-	Vector3i operator* (Vector3i& other)
+	Vector3i operator* (const Vector3i& other)
 	{
-		Vector3f ret;
+		Vector3i ret;
 		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
 		ret.y = (this->mat[1][0] * other.x) + (this->mat[1][1] * other.y) + (this->mat[1][2] * other.z);
 		ret.z = (this->mat[2][0] * other.x) + (this->mat[2][1] * other.y) + (this->mat[2][2] * other.z);
 
 		return ret;
 	}
-	Vector4 operator* (Vector4& other)
+	Vector4 operator* (const Vector4& other)
 	{
 		Vector4 ret;
 		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
@@ -140,17 +129,37 @@ public:
 	
 	void operator*= (const Mat4& other)
 	{
+		Mat4 im;
+
 		for (int row = 0; row < 4; row++)
 		{
 			for (int col = 0; col < 4; col++)
 			{
-				this->mat[row][col] =
+				im[row][col] =
 					(other.mat[row][0] * this->mat[0][col]) +
 					(other.mat[row][1] * this->mat[1][col]) +
 					(other.mat[row][2] * this->mat[2][col]) +
 					(other.mat[row][3] * this->mat[3][col]);
 			}
 		}
+		*this = im;
+	}
+	static Mat4 Mult (const Mat4& m1, const Mat4& m2)
+	{
+		Mat4 result;
+		// only pre
+		for (int row = 0; row < 4; row++)
+		{
+			for (int col = 0; col < 4; col++)
+			{
+				result[row][col] =
+					(m2.mat[row][0] * m1.mat[0][col]) +
+					(m2.mat[row][1] * m1.mat[1][col]) +
+					(m2.mat[row][2] * m1.mat[2][col]) +
+					(m2.mat[row][3] * m1.mat[3][col]);
+			}
+		}
+		return result;
 	}
 	
 	Vector3f Xform(Vector3f& vec)
@@ -296,6 +305,7 @@ public:
 		this->mat[2][col] = to.z;
 		this->mat[3][col] = to.w;
 	}
+	// sets the fourth vector to pos
 	void SetTranslation(const Vector3f& pos)
 	{
 		mat[3][0] = pos.x;
@@ -312,7 +322,7 @@ public:
 		rot.mat[2][2] = cos(radians);
 		return rot;
 	}
-	// returns a rotationMatrix with values set on x
+	// returns a rotationMatrix with values set on y
 	static Mat4 CreateRotatedY(float radians)
 	{
 		Mat4 rot;
@@ -322,7 +332,7 @@ public:
 		rot.mat[2][2] = cos(radians);
 		return rot;
 	}
-	// returns a rotationMatrix with values set on x
+	// returns a rotationMatrix with values set on z
 	static Mat4 CreateRotatedZ(float radians)
 	{
 		Mat4 rot;
@@ -345,11 +355,11 @@ public:
 	void Transpose()
 	{
 		Mat4 result;
-		for (int l = 0; l < 4; l++)
+		for (int row = 0; row < 4; row++)
 		{
-			for (int c = 0; c < 4; c++)
+			for (int col = 0; col < 4; col++)
 			{
-				this->mat[l][c] = this->mat[c][l];
+				this->mat[row][col] = this->mat[col][row];
 			}
 		}
 	}

@@ -13,10 +13,10 @@ class Vector3
 
 public:
     Vector3() : x(0), y(0), z(0) {}
-    Vector3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
-    //Vector3(const T &_x, const T &_y, const T &_z) : x(_x), y(_y), z(_z) {}
+    Vector3(const T &_x, const T &_y, const T &_z) : x(_x), y(_y), z(_z) {}
+    //Vector3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
 
-    Vector3(Vector3 &vec) : x(vec.x), y(vec.y), z(vec.z) {}
+    Vector3(const Vector3 &vec) : x(vec.x), y(vec.y), z(vec.z) {}
 
     Vector3(Direction dir)
     {
@@ -59,16 +59,16 @@ public:
     virtual ~Vector3() {}
 
     /////////////////////////////// OPS /////////////////////////////////////
-    virtual Vector3 operator+ (Vector3& other) { return Vector3(this->x + other.x, this->y + other.y, this->z + other.z); }
-    virtual Vector3 operator- (Vector3& other) { return Vector3(this->x - other.x, this->y - other.y, this->z - other.z); }
+    Vector3 operator+ (const Vector3& other) const { return Vector3(this->x + other.x, this->y + other.y, this->z + other.z); }
+    Vector3 operator- (const Vector3& other) const { return Vector3(this->x - other.x, this->y - other.y, this->z - other.z); }
 
-    virtual void operator+= (Vector3& other) { this->x += other.x; this->y += other.y; this->z += other.z; }
+    //virtual void operator+= (Vector3& other) { this->x += other.x; this->y += other.y; this->z += other.z; }
     //virtual void operator+= (Vector3 other) { this->x += other.x; this->y += other.y; this->z += other.z; }
-    virtual void operator+= (const Vector3& other) { this->x += other.x; this->y += other.y; this->z += other.z; }
+    void operator+= (const Vector3& other) { this->x += other.x; this->y += other.y; this->z += other.z; }
     
-    virtual void operator-= (Vector3& other) { this->x -= other.x; this->y -= other.y; this->z -= other.z; }
-    virtual void operator-= (const Vector3& other) { this->x -= other.x; this->y -= other.y; this->z -= other.z; }
-    virtual bool operator== (Vector3& other)
+    //virtual void operator-= (Vector3& other) { this->x -= other.x; this->y -= other.y; this->z -= other.z; }
+    void operator-= (const Vector3& other) { this->x -= other.x; this->y -= other.y; this->z -= other.z; }
+    virtual bool operator== (const Vector3& other) const
     {
         if (std::is_floating_point_v<Type>)
             return (abs(this->x) - abs(other.x) <0.01f && abs(this->y) - abs(other.y) <0.01f && abs(this->z) - abs(other.z) <0.01f);
@@ -78,7 +78,7 @@ public:
     
     }
 
-    virtual bool operator!= (Vector3& other)
+    bool operator!= (const Vector3& other)
     {
         if (std::is_floating_point_v<Type>)
             return (abs(this->x) - abs(other.x) > 0.01f || abs(this->y) - abs(other.y) <0.01f || abs(this->z) - abs(other.z) <0.01f);
@@ -88,11 +88,11 @@ public:
             return (this->x != other.x || this->y != other.y && this->z != other.z);
     }
     
-    Vector3 operator* (Vector3& other) { return Vector3(this->x * other.x, this->y * other.y, this->z * other.z); }
+    Vector3 operator* (const Vector3& other) { return Vector3(this->x * other.x, this->y * other.y, this->z * other.z); }
     Vector3 operator* (int scalar) { return Vector3(this->x * scalar, this->y * scalar, this->z * scalar); }
     Vector3 operator* (float scalar) { return Vector3(this->x * scalar, this->y * scalar, this->z * scalar); }
 
-    Vector3 operator*= (Vector3& other) { return Vector3(this->x = this->x * other.x, this->y = this->y * other.y, this->y = this->z * other.z); }
+    Vector3 operator*= (const Vector3& other) { return Vector3(this->x = this->x * other.x, this->y = this->y * other.y, this->y = this->z * other.z); }
     Vector3 operator*= (int scalar) { return Vector3(this->x = this->x * scalar, this->y = this->y * scalar, this->z = this->z * scalar); }
     Vector3 operator*= (float scalar) { return Vector3(this->x = this->x * scalar, this->y = this->y * scalar, this->z = this->z * scalar); }
 
@@ -185,48 +185,48 @@ public:
     Type x, y, z;
 };
 
-// typedef Vector3<float> Vector3f;
-// typedef Vector3<int> Vector3i;
+typedef Vector3<float> Vector3f;
+typedef Vector3<int> Vector3i;
 
 /////////////////////////////// VECTOR3I ////////////////////////////////////
 
-class Vector3i : public Vector3<int>
-{
-public:
-    Vector3i() : Vector3(0, 0, 0) {}
-    Vector3i(int _z, int _y, int _x) : Vector3(_x, _y, _z) {}
-    Vector3i(Vector3i &vec) :Vector3(vec.x, vec.y, vec.z) { }
-    Vector3i(const Vector3i &vec) :Vector3(vec.x, vec.y, vec.z) { }
-    Vector3i(Vector3<float> &vec) :Vector3(vec.x, vec.y, vec.z) { }
-    Vector3i(const Vector3<float> &vec) :Vector3(vec.x, vec.y, vec.z) { }
-    Vector3i(float _z, float _y, float _x) : Vector3((int)_x, (int)_y, (int)_z) {}
+// class Vector3i : public Vector3<int>
+// {
+// public:
+//     Vector3i() : Vector3(0, 0, 0) {}
+//     Vector3i(int _z, int _y, int _x) : Vector3(_x, _y, _z) {}
+//     Vector3i(Vector3i &vec) :Vector3(vec.x, vec.y, vec.z) { }
+//     Vector3i(const Vector3i &vec) :Vector3(vec.x, vec.y, vec.z) { }
+//     Vector3i(Vector3<float> &vec) :Vector3(vec.x, vec.y, vec.z) { }
+//     Vector3i(const Vector3<float> &vec) :Vector3(vec.x, vec.y, vec.z) { }
+//     Vector3i(float _z, float _y, float _x) : Vector3((int)_x, (int)_y, (int)_z) {}
 
-    ~Vector3i() {}
-};
+//     ~Vector3i() {}
+// };
 
-/////////////////////////////// VECTOR3F ////////////////////////////////////
+// /////////////////////////////// VECTOR3F ////////////////////////////////////
 
-class Vector3f : public Vector3<float>
-{
-public:
-    Vector3f() : Vector3(0.0f, 0.0f, 0.0f) {}
-    Vector3f(float _x, float _y, float _z) : Vector3(_x, _y, _z) {}
+// class Vector3f : public Vector3<float>
+// {
+// public:
+//     Vector3f() : Vector3(0.0f, 0.0f, 0.0f) {}
+//     Vector3f(float _x, float _y, float _z) : Vector3(_x, _y, _z) {}
     
-    //Vector3f(const float &_x, const float &_y, const float &_z) : Vector3(_x, _y, _z) {}
-    //Vector3f(float &_x, float &_y, float &_z) : Vector3(_x, _y, _z) {}
+//     //Vector3f(const float &_x, const float &_y, const float &_z) : Vector3(_x, _y, _z) {}
+//     //Vector3f(float &_x, float &_y, float &_z) : Vector3(_x, _y, _z) {}
     
-    Vector3f(int _x, int _y, int _z) : Vector3((float)_x, (float)_y, (float)_z) {}
-    Vector3f(const int &_x, const int &_y, const int &_z) : Vector3((float)_x, (float)_y, (float)_z) {}
+//     Vector3f(int _x, int _y, int _z) : Vector3((float)_x, (float)_y, (float)_z) {}
+//     Vector3f(const int &_x, const int &_y, const int &_z) : Vector3((float)_x, (float)_y, (float)_z) {}
 
-    Vector3f(Vector3<float> &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
-    Vector3f(const Vector3<float> &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
-    Vector3f(Vector3f &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
-    Vector3f(const Vector3<int> &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
-    Vector3f(Vector3<int> &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
+//     Vector3f(Vector3<float> &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
+//     Vector3f(const Vector3<float> &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
+//     Vector3f(Vector3f &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
+//     Vector3f(const Vector3<int> &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
+//     Vector3f(Vector3<int> &fvec) :Vector3(fvec.x, fvec.y, fvec.z){}
 
-    // void operator+= (Vector3f other) override { this->x += other.x; this->y += other.y; this->z += other.z; }
-    // void operator+= (Vector3f &other) override  { this->x += other.x; this->y += other.y; this->z += other.z; }
-    // void operator+= (const Vector3f &other) override { this->x += other.x; this->y += other.y; this->z += other.z; }
+//     // void operator+= (Vector3f other) override { this->x += other.x; this->y += other.y; this->z += other.z; }
+//     // void operator+= (Vector3f &other) override  { this->x += other.x; this->y += other.y; this->z += other.z; }
+//     // void operator+= (const Vector3f &other) override { this->x += other.x; this->y += other.y; this->z += other.z; }
 
-    ~Vector3f() {}
-};
+//     ~Vector3f() {}
+// };
