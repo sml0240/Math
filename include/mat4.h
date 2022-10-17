@@ -69,6 +69,11 @@ public:
 		int operator-> () { return this->mrow; }
 	};
 
+	Row operator[] (const int idx)
+	{
+		return Row(this, idx);
+	}
+	
 	void operator+= (Mat4 &other)
 	{
 		for (int row = 0; row < 4; row++)
@@ -189,10 +194,6 @@ public:
 		ret.w = ((this->mat[0][2] * vec.x) + (this->mat[1][2] * vec.y) + (this->mat[2][2] * vec.z) + this->mat[3][3]);
 		return ret;
 	}
-	Row operator[] (const int idx)
-	{
-		return Row(this, idx);
-	}
 
 	void Rotate(Axis axis, float angle)
 	{
@@ -247,12 +248,10 @@ public:
 		this->mat[2][2] = 1.0f;
 		this->mat[3][3] = 1.0f;
 	}
-	void Identity()
+
+	static Mat4 Identity()
 	{
-		mat[0][0] = 1.0f;
-		mat[1][1] = 1.0f;
-		mat[2][2] = 1.0f;
-		mat[3][3] = 1.0f;
+		return Mat4();
 	}
 	void Translate(const Vector3f& translation)
 	{
@@ -278,6 +277,7 @@ public:
 	{
 		return Vector4(this->mat[0][col], this->mat[1][col], this->mat[2][col], this->mat[3][col]);
 	}
+	Vector3f At() { Vector3f(&this->mat[3][0], &this->mat[3][1], &this->mat[3][0]); }
 
 	void SetRow(uint8_t row, Vector3f& to)
 	{
@@ -376,7 +376,6 @@ public:
 		}
 		return result;
 	}
-	
 	void To1DArray(float* arr)
 	{
 		for (size_t row = 0; row < 4; row++)
