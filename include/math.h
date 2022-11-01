@@ -18,6 +18,7 @@ enum class Axis
 
 #include "vector3.h"
 #include "mat4.h"
+#include "random.h"
 
 #define M_RADPI        57.295779513082
 #define PI            3.14159265358979323846

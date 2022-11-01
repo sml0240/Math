@@ -14,8 +14,6 @@ class Vector3
 public:
     Vector3() : x(0), y(0), z(0) {}
     Vector3(const T &_x, const T &_y, const T &_z) : x(_x), y(_y), z(_z) {}
-    //Vector3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
-
     Vector3(const Vector3 &vec) : x(vec.x), y(vec.y), z(vec.z) {}
 
     Vector3(Direction dir)

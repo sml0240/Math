@@ -1,0 +1,31 @@
+from godot source code SpringArm Class:
+
+
+Vector3 motion;
+const Vector3 cast_direction(get_global_transform().basis.xform(Vector3(0, 0, 1)));
+
+motion = Vector3(cast_direction * (spring_length));
+
+current_spring_length = spring_length * motion_delta;
+Transform3D child_transform;
+child_transform.origin = get_global_transform().origin + cast_direction * (spring_length * motion_delta);
+
+my gd project:
+
+var mouse_input := Vector2()
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		mouse_input = event.relative
+
+func _physics_process(delta: float) -> void:
+	#rotate parent object horizontally
+	rotate_y(-mouse_input.x * 0.005)
+	var length: float = 10
+	# rotate child camera vertically
+	camera.rotate_x(-mouse_input.y * 0.005)
+	camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -85, 45)
+	# apply the translation to camera after rotation
+	camera.global_translation = global_translation + (camera.global_transform.basis.z * length)
+	
+	mouse_input = Vector2.ZERO
