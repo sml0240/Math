@@ -277,7 +277,11 @@ public:
 	{
 		return Vector4(this->mat[0][col], this->mat[1][col], this->mat[2][col], this->mat[3][col]);
 	}
-	Vector3f At() { Vector3f(&this->mat[3][0], &this->mat[3][1], &this->mat[3][0]); }
+
+	// untested Left, Up, At
+	Vector3f Left() { Vector3f(this->mat[0][0], this->mat[0][1], this->mat[0][2]); }
+	Vector3f Up() { Vector3f(this->mat[1][0], this->mat[1][1], this->mat[1][2]); }
+	Vector3f At() { Vector3f(this->mat[2][0], this->mat[2][1], this->mat[2][2]); }
 
 	void SetRow(uint8_t row, Vector3f& to)
 	{

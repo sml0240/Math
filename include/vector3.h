@@ -14,11 +14,11 @@ class Vector3
 public:
     Vector3() : x(0), y(0), z(0) {}
     Vector3(const T &_x, const T &_y, const T &_z) : x(_x), y(_y), z(_z) {}
+    Vector3(const T *_x, const T *_y, const T *_z) : x(_x), y(_y), z(_z) {}
     Vector3(const Vector3 &vec) : x(vec.x), y(vec.y), z(vec.z) {}
 
     Vector3(Direction dir)
     {
-        Vector3<int> vec;
         switch (dir)
         {
         case Direction::BACKWARD:
@@ -73,7 +73,6 @@ public:
 
         if (std::is_integral_v<Type>)
             return (this->x == other.x && this->y == other.y && this->z == other.z);
-    
     }
 
     bool operator!= (const Vector3& other)
@@ -172,6 +171,7 @@ public:
     
     static Vector3 ZERO() { return Vector3(0, 0, 0); }
     static Vector3 ONE() { return Vector3(1, 1, 1); }
+    // Right hand Directions
     static Vector3 UP() { return Vector3(0, 1, 0); }
     static Vector3 DOWN() { return Vector3(0, -1, 0); }
     static Vector3 LEFT() { return Vector3(1, 0, 0); }
