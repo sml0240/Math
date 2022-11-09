@@ -17,6 +17,7 @@ enum class Axis
 };
 
 #include "vector3.h"
+#include "vector2.h"
 #include "mat4.h"
 #include "random.h"
 

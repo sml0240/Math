@@ -22,8 +22,8 @@ project "Tests"
 
     files
     {
-        "tests/*.h",
-        "tests/*.cpp",
+        "tests/**.h",
+        "tests/**.cpp",
     }
 
     includedirs

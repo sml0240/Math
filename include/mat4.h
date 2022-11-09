@@ -176,6 +176,7 @@ public:
 		return ret;
 	}
 
+	// not working correctly, i have just inverted translation
 	Vector3f XformInv(Vector3f& vec)
 	{
 		Vector3f ret;
@@ -185,6 +186,7 @@ public:
 		ret -= this->GetTranslation();
 		return ret;
 	}
+	
 	Vector4 Xform(Vector4& vec)
 	{
 		Vector4 ret;
@@ -249,10 +251,18 @@ public:
 		this->mat[3][3] = 1.0f;
 	}
 
-	static Mat4 Identity()
+	void Identity()
 	{
-		return Mat4();
+		for (int row = 0; row < 4; row++)
+		{
+			for (int col = 0; col < 4; col++)
+			{
+				this->mat[row][col] = 0.0f;
+			}
+		}
+		SetDiagonal();
 	}
+
 	void Translate(const Vector3f& translation)
 	{
 		SetTranslation(translation);
@@ -279,9 +289,9 @@ public:
 	}
 
 	// untested Left, Up, At
-	Vector3f Left() { Vector3f(this->mat[0][0], this->mat[0][1], this->mat[0][2]); }
-	Vector3f Up() { Vector3f(this->mat[1][0], this->mat[1][1], this->mat[1][2]); }
-	Vector3f At() { Vector3f(this->mat[2][0], this->mat[2][1], this->mat[2][2]); }
+	Vector3f Left() { return Vector3f(this->mat[0][0], this->mat[0][1], this->mat[0][2]); }
+	Vector3f Up() { return Vector3f(this->mat[1][0], this->mat[1][1], this->mat[1][2]); }
+	Vector3f At() { return Vector3f(this->mat[2][0], this->mat[2][1], this->mat[2][2]); }
 
 	void SetRow(uint8_t row, Vector3f& to)
 	{
