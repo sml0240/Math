@@ -3,14 +3,6 @@
 #include <string>
 
 
-// class SeedGenerator
-// {
-//     public:
-//     SeedGenerator(){}
-//     SeedGenerator(std::string &init_seed){}
-//     ~SeedGenerator(){}
-// }
-
 class RandomGenerator
 {
 private:
@@ -19,7 +11,13 @@ private:
     bool is_ready = false;
 
 public:
-    RandomGenerator(){};
+    RandomGenerator()
+    {
+        m_Seed = std::to_string(1337);
+        std::seed_seq seq (m_Seed.begin(), m_Seed.end());
+        engine.seed(seq);
+    };
+
     RandomGenerator(std::string &seed)
         : is_ready(true), m_Seed(seed)
         {
@@ -46,13 +44,17 @@ public:
     inline int32_t Randint32() { std::uniform_int_distribution<int32_t> dist(-2147483647, 2147483647); return dist(engine); };
     inline uint32_t Randuint32() {std::uniform_int_distribution<uint32_t> dist(0, 4294967295); return dist(engine); }; // max 2,147,483,647 // min -2,147,483,648
 
- 
+    template <typename Itype>
+    Itype RandInt(const Itype &min, const Itype &max)
+    {
+        std::uniform_int_distribution<Itype> dist(min, max); return dist(engine);
+    }
+
     inline int RandRangeInt(int min, int max)
     {
         std::uniform_int_distribution<int> dist(min, max);
         return dist(engine);
     };
-
     // TODO
     // im casting to double to use uni_real_dist 
     // change to proper float func

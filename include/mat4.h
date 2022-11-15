@@ -1,11 +1,9 @@
 #pragma once
 //#include "vector3.h"
+#include <iostream>
 #include <assert.h>
 #include <inttypes.h>
 #include "vector3.h"
-
-// class Vector3f;
-// class Vector3i;
 
 class Vector4
 {
@@ -46,18 +44,18 @@ public:
 	}
 	~Mat4(){}
 
-	void PrintSelf()
+	void PrintSelf() const
 	{
 		for (int row = 0; row < 4; row++)
 		{
-			//std::cout << std::endl;
-			/*for (int col = 0; col < 4; col++)
+			std::cout << std::endl;
+			for (int col = 0; col < 4; col++)
 			{
 				std::cout << " | " << mat[row][col];
-			}*/
+			}
 		}
-		/*std::cout << std::endl;
-		std::cout << std::endl;*/
+		std::cout << std::endl;
+		std::cout << std::endl;
 	}
 
 	struct Row
@@ -85,7 +83,7 @@ public:
 		}
 	}
 	
-	Vector3f operator* (const Vector3f& other)
+	Vector3f operator* (const Vector3f& other) const
 	{	
 		Vector3f ret;
 		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
@@ -94,7 +92,7 @@ public:
 		return ret;
 	}
 
-	Vector3i operator* (const Vector3i& other)
+	Vector3i operator* (const Vector3i& other) const
 	{
 		Vector3i ret;
 		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
@@ -103,7 +101,7 @@ public:
 
 		return ret;
 	}
-	Vector4 operator* (const Vector4& other)
+	Vector4 operator* (const Vector4& other) const
 	{
 		Vector4 ret;
 		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
@@ -149,7 +147,7 @@ public:
 		}
 		*this = im;
 	}
-	static Mat4 Mult (const Mat4& m1, const Mat4& m2)
+	static Mat4 Mult(const Mat4& m1, const Mat4& m2)
 	{
 		Mat4 result;
 		// only pre
@@ -167,7 +165,7 @@ public:
 		return result;
 	}
 	
-	Vector3f Xform(Vector3f& vec)
+	Vector3f Xform(const Vector3f& vec) const
 	{
 		Vector3f ret;
 		ret.x = ((this->mat[0][0] * vec.x) + (this->mat[1][0] * vec.y) + (this->mat[2][0] * vec.z) + this->mat[3][0]);
@@ -177,7 +175,7 @@ public:
 	}
 
 	// not working correctly, i have just inverted translation
-	Vector3f XformInv(Vector3f& vec)
+	Vector3f XformInv(const Vector3f& vec) const
 	{
 		Vector3f ret;
 		ret.x = (this->mat[0][0] * vec.x) + (this->mat[1][0] * vec.y) + (this->mat[2][0] * vec.z);
@@ -187,7 +185,7 @@ public:
 		return ret;
 	}
 	
-	Vector4 Xform(Vector4& vec)
+	Vector4 Xform(const Vector4& vec) const
 	{
 		Vector4 ret;
 		ret.x = ((this->mat[0][0] * vec.x) + (this->mat[1][0] * vec.y) + (this->mat[2][0] * vec.z) + this->mat[3][0]);
@@ -267,23 +265,23 @@ public:
 	{
 		SetTranslation(translation);
 	}
-	Vector3f GetTranslation()
+	Vector3f GetTranslation() const
 	{
 		return Vector3f(this->mat[3][0], this->mat[3][1], this->mat[3][2]);
 	}
-	Vector3f GetRow(uint8_t row)
+	Vector3f GetRow(uint8_t row) const
 	{
 		return Vector3f(this->mat[row][0], this->mat[row][1], this->mat[row][2]);
 	}
-	Vector3f GetCol(uint8_t col)
+	Vector3f GetCol(uint8_t col) const
 	{
 		return Vector3f(this->mat[0][col], this->mat[1][col], this->mat[2][col]);
 	}
-	Vector4 GetRow4(uint8_t row)
+	Vector4 GetRow4(uint8_t row) const
 	{
 		return Vector4(this->mat[row][0], this->mat[row][1], this->mat[row][2] , this->mat[row][3]);
 	}
-	Vector4 GetCol4(uint8_t col)
+	Vector4 GetCol4(uint8_t col) const
 	{
 		return Vector4(this->mat[0][col], this->mat[1][col], this->mat[2][col], this->mat[3][col]);
 	}
@@ -292,27 +290,27 @@ public:
 	Vector3f Left() { return Vector3f(this->mat[0][0], this->mat[0][1], this->mat[0][2]); }
 	Vector3f Up() { return Vector3f(this->mat[1][0], this->mat[1][1], this->mat[1][2]); }
 	Vector3f At() { return Vector3f(this->mat[2][0], this->mat[2][1], this->mat[2][2]); }
-
-	void SetRow(uint8_t row, Vector3f& to)
+	
+	void SetRow(uint8_t row, const Vector3f& to)
 	{
 		this->mat[row][0] = to.x;
 		this->mat[row][1] = to.y;
 		this->mat[row][2] = to.z;
 	}
-	void SetCol(uint8_t col, Vector3f& to)
+	void SetCol(uint8_t col, const Vector3f& to)
 	{
 		this->mat[0][col] = to.x;
 		this->mat[1][col] = to.y;
 		this->mat[2][col] = to.z;
 	}
-	void SetRow4(uint8_t row, Vector4& to)
+	void SetRow4(uint8_t row, const Vector4& to)
 	{
 		this->mat[row][0] = to.x;
 		this->mat[row][1] = to.y;
 		this->mat[row][2] = to.z;
 		this->mat[row][3] = to.w;
 	}
-	void SetCol4(uint8_t col, Vector4& to)
+	void SetCol4(uint8_t col, const Vector4& to)
 	{
 		this->mat[0][col] = to.x;
 		this->mat[1][col] = to.y;
@@ -365,6 +363,7 @@ public:
 		scaled.mat[3][3] = 1.0f;
 		return scaled;
 	}
+	// TESTED, WORKS
 	// transposes this mat in place
 	void Transpose()
 	{
@@ -373,10 +372,12 @@ public:
 		{
 			for (int col = 0; col < 4; col++)
 			{
-				this->mat[row][col] = this->mat[col][row];
+				result.mat[row][col] = this->mat[col][row];
 			}
 		}
+		*this = result;
 	}
+	// TESTED, WORKS
 	// returns a new transposed mat
 	Mat4 Transposed() const
 	{
@@ -390,6 +391,7 @@ public:
 		}
 		return result;
 	}
+	// TESTED, WORKS
 	void To1DArray(float* arr)
 	{
 		for (size_t row = 0; row < 4; row++)

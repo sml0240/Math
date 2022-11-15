@@ -3,6 +3,7 @@
 #include <type_traits>
 #include <typeinfo>
 #include <inttypes.h>
+#include <string>
 
 template <typename T>
 class Vector3
@@ -12,6 +13,12 @@ class Vector3
     typedef T& r_Type;
 
 public:
+
+    // components
+    Type x, y, z;
+
+     ///////////////////////////// CONSTR ////////////////////////////////////
+
     Vector3() : x(0), y(0), z(0) {}
     Vector3(const T &_x, const T &_y, const T &_z) : x(_x), y(_y), z(_z) {}
     Vector3(const T *_x, const T *_y, const T *_z) : x(_x), y(_y), z(_z) {}
@@ -164,11 +171,7 @@ public:
         return typeid(T) == typeid(Other);
     }
 
-    void PrintSelf()
-    {
-        //std::cout << "Vector3( " << this->x << ", " << this->y << ", " << this->z << ")" << std::endl;
-    }
-    
+    std::string ToString() { return std::string("Vector3(%f, %f, %f)", x, y, z); }
     static Vector3 ZERO() { return Vector3(0, 0, 0); }
     static Vector3 ONE() { return Vector3(1, 1, 1); }
     // Right hand Directions
@@ -179,10 +182,9 @@ public:
     static Vector3 FORWARD() { return Vector3(0, 0, 1); }
     static Vector3 BACKWARD() { return Vector3(0, 0, -1); }
 
-    // components
-    Type x, y, z;
 };
 
+// defines for ease of use
 typedef Vector3<float> Vector3f;
 typedef Vector3<int> Vector3i;
 
