@@ -1,9 +1,11 @@
 #pragma once
+
 #include <cmath>
 #include <type_traits>
 #include <typeinfo>
 #include <inttypes.h>
 #include <string>
+
 
 template <typename T>
 class Vector3
@@ -23,6 +25,13 @@ public:
     Vector3(const T &_x, const T &_y, const T &_z) : x(_x), y(_y), z(_z) {}
     Vector3(const T *_x, const T *_y, const T *_z) : x(_x), y(_y), z(_z) {}
     Vector3(const Vector3 &vec) : x(vec.x), y(vec.y), z(vec.z) {}
+
+    //Vector3(T arr[2], T _z) : x(arr[0]), y(arr[1]), z(_z) {}
+    //Vector3(T arr[2]) : x(arr[0]), y(arr[1]), z(0) {}
+    //Vector3(T arr[3]) : x(arr[0]), y(arr[1]), z(arr[2]) {}
+    //Vector3(T arr[4]) : x(arr[0]), y(arr[1]), z(arr[2]) {}
+
+    //T [3]Into(){return {x, y, z}; }
 
     Vector3(Direction dir)
     {
@@ -59,10 +68,10 @@ public:
         }
         }
     }
-    
+    static uint8_t GetPropertyCount(){ return 3; }
     /////////////////////////////// DEST ////////////////////////////////////
-    virtual ~Vector3() {}
-
+    ~Vector3() {}
+    
     /////////////////////////////// OPS /////////////////////////////////////
     Vector3 operator+ (const Vector3& other) const { return Vector3(this->x + other.x, this->y + other.y, this->z + other.z); }
     Vector3 operator- (const Vector3& other) const { return Vector3(this->x - other.x, this->y - other.y, this->z - other.z); }

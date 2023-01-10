@@ -4,33 +4,35 @@
 #include <assert.h>
 #include <inttypes.h>
 #include "vector3.h"
+#include "vector4.h"
 
-class Vector4
-{
-public:
-	Vector4()
-		: x(0.0f), y(0.0f), z(0.0f), w(1.0f)
-	{}
-	Vector4(float _x, float _y, float _z, float _w)
-		: x(_x), y(_y), z(_z), w(_w)
-	{}
-	Vector4(Vector3f &vec)
-		: x(vec.x), y(vec.y), z(vec.z), w(1.0f)
-	{}
-	~Vector4() {}
+//#include "math.h"
+// class Vector4
+// {
+// public:
+// 	Vector4()
+// 		: x(0.0f), y(0.0f), z(0.0f), w(1.0f)
+// 	{}
+// 	Vector4(float _x, float _y, float _z, float _w)
+// 		: x(_x), y(_y), z(_z), w(_w)
+// 	{}
+// 	Vector4(Vector3f &vec)
+// 		: x(vec.x), y(vec.y), z(vec.z), w(1.0f)
+// 	{}
+// 	~Vector4() {}
 
-	Vector4 operator* (Vector4 &other)
-	{
-		return Vector4(this->x * other.x, this->y * other.y, this->z * other.z, this->w * other.w);
-	}
+// 	Vector4 operator* (Vector4 &other)
+// 	{
+// 		return Vector4(this->x * other.x, this->y * other.y, this->z * other.z, this->w * other.w);
+// 	}
 
-	float Dot(Vector4& other)
-	{
-		return x * other.x + y * other.y + z * other.z + w * other.w;
-	}
+// 	float Dot(Vector4& other)
+// 	{
+// 		return x * other.x + y * other.y + z * other.z + w * other.w;
+// 	}
 
-	float x, y, z, w;
-};
+// 	float x, y, z, w;
+// };
 
 // vector * matrix
 // not matrix * vector
@@ -54,8 +56,8 @@ public:
 				std::cout << " | " << mat[row][col];
 			}
 		}
-		std::cout << std::endl;
-		std::cout << std::endl;
+		std::cout << "\n\n";
+
 	}
 
 	struct Row
@@ -101,9 +103,9 @@ public:
 
 		return ret;
 	}
-	Vector4 operator* (const Vector4& other) const
+	Vector4f operator* (const Vector4f& other) const
 	{
-		Vector4 ret;
+		Vector4f ret;
 		ret.x = (this->mat[0][0] * other.x) + (this->mat[0][1] * other.y) + (this->mat[0][2] * other.z);
 		ret.y = (this->mat[1][0] * other.x) + (this->mat[1][1] * other.y) + (this->mat[1][2] * other.z);
 		ret.z = (this->mat[2][0] * other.x) + (this->mat[2][1] * other.y) + (this->mat[2][2] * other.z);
@@ -175,19 +177,19 @@ public:
 	}
 
 	// not working correctly, i have just inverted translation
-	Vector3f XformInv(const Vector3f& vec) const
-	{
-		Vector3f ret;
-		ret.x = (this->mat[0][0] * vec.x) + (this->mat[1][0] * vec.y) + (this->mat[2][0] * vec.z);
-		ret.y = (this->mat[0][1] * vec.x) + (this->mat[1][1] * vec.y) + (this->mat[2][1] * vec.z);
-		ret.z = (this->mat[0][2] * vec.x) + (this->mat[1][2] * vec.y) + (this->mat[2][2] * vec.z);
-		ret -= this->GetTranslation();
-		return ret;
-	}
+	//Vector3f XformInv(const Vector3f& vec) const
+	//{
+	//	Vector3f ret;
+	//	ret.x = (this->mat[0][0] * vec.x) + (this->mat[1][0] * vec.y) + (this->mat[2][0] * vec.z);
+	//	ret.y = (this->mat[0][1] * vec.x) + (this->mat[1][1] * vec.y) + (this->mat[2][1] * vec.z);
+	//	ret.z = (this->mat[0][2] * vec.x) + (this->mat[1][2] * vec.y) + (this->mat[2][2] * vec.z);
+	//	ret -= this->GetTranslation();
+	//	return ret;
+	//}
 	
-	Vector4 Xform(const Vector4& vec) const
+	Vector4f Xform(const Vector4f& vec) const
 	{
-		Vector4 ret;
+		Vector4f ret;
 		ret.x = ((this->mat[0][0] * vec.x) + (this->mat[1][0] * vec.y) + (this->mat[2][0] * vec.z) + this->mat[3][0]);
 		ret.y = ((this->mat[0][1] * vec.x) + (this->mat[1][1] * vec.y) + (this->mat[2][1] * vec.z) + this->mat[3][1]);
 		ret.z = ((this->mat[0][2] * vec.x) + (this->mat[1][2] * vec.y) + (this->mat[2][2] * vec.z) + this->mat[3][2]);
@@ -234,6 +236,7 @@ public:
 		ret[1][1] = scale.y;
 		ret[2][2] = scale.z;
 		ret[3][3] = 1.0f;
+		return ret;
 	}
 	
 	void Scale(float scale) {
@@ -269,21 +272,21 @@ public:
 	{
 		return Vector3f(this->mat[3][0], this->mat[3][1], this->mat[3][2]);
 	}
-	Vector3f GetRow(uint8_t row) const
+	Vector3f GetRow(uint8_t row)
 	{
 		return Vector3f(this->mat[row][0], this->mat[row][1], this->mat[row][2]);
 	}
-	Vector3f GetCol(uint8_t col) const
+	Vector3f GetCol(uint8_t col)
 	{
 		return Vector3f(this->mat[0][col], this->mat[1][col], this->mat[2][col]);
 	}
-	Vector4 GetRow4(uint8_t row) const
+	Vector4f GetRow4(uint8_t row)
 	{
-		return Vector4(this->mat[row][0], this->mat[row][1], this->mat[row][2] , this->mat[row][3]);
+		return Vector4f(this->mat[row][0], this->mat[row][1], this->mat[row][2] , this->mat[row][3]);
 	}
-	Vector4 GetCol4(uint8_t col) const
+	Vector4f GetCol4(uint8_t col)
 	{
-		return Vector4(this->mat[0][col], this->mat[1][col], this->mat[2][col], this->mat[3][col]);
+		return Vector4f(this->mat[0][col], this->mat[1][col], this->mat[2][col], this->mat[3][col]);
 	}
 
 	// untested Left, Up, At
@@ -303,14 +306,14 @@ public:
 		this->mat[1][col] = to.y;
 		this->mat[2][col] = to.z;
 	}
-	void SetRow4(uint8_t row, const Vector4& to)
+	void SetRow4(uint8_t row, const Vector4f& to)
 	{
 		this->mat[row][0] = to.x;
 		this->mat[row][1] = to.y;
 		this->mat[row][2] = to.z;
 		this->mat[row][3] = to.w;
 	}
-	void SetCol4(uint8_t col, const Vector4& to)
+	void SetCol4(uint8_t col, const Vector4f& to)
 	{
 		this->mat[0][col] = to.x;
 		this->mat[1][col] = to.y;

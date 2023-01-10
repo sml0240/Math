@@ -1,5 +1,7 @@
 #pragma once
 
+#include <typeinfo>
+
 enum class Direction
 {
 	UP = 0,
@@ -16,10 +18,34 @@ enum class Axis
 	Z,
 };
 
-#include "vector3.h"
 #include "vector2.h"
+#include "vector3.h"
+#include "vector4.h"
 #include "mat4.h"
 #include "random.h"
+
+// template <typename T>
+// struct MidVec
+// {
+// 	uint8_t property_count;
+// 	T* properties;
+// };
+
+// namespace Vector
+// {
+// 	template<typename FromType, typename ToType>
+// 	ToType To(const FromType &from)
+// 	{
+// 		if (from > FromType::)
+// 	// 	switch (typeid(ToType).hash_code())
+// 	// 	{
+// 	// 		case typeid(FromType).hash_code():
+// 	// 		{
+				
+// 	// 		}
+// 	// 	}
+// 	}
+// }
 
 #define M_RADPI        57.295779513082
 #define PI            3.14159265358979323846

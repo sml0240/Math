@@ -17,6 +17,13 @@ public:
     Vector2(int _x, int _y) : x(_x), y(_y) {}
     Vector2(const Vector2 &vec) : x(vec.x), y(vec.y) {}
 
+    //Vector2(const T arr[2], T _z) : x(arr[0]), y(arr[1]) {}
+    //Vector2(const T arr[2]) : x(arr[0]), y(arr[1]) {}
+    //Vector2(const T arr[3]) : x(arr[0]), y(arr[1]) {}
+    //Vector2(const T arr[4]) : x(arr[0]), y(arr[1]) {}
+    
+    //T [2]Into(){return {x, y}; }
+
     Vector2(Direction dir)
     {
         switch (dir)
@@ -44,8 +51,8 @@ public:
     }
     
     /////////////////////////////// DEST ////////////////////////////////////
-    virtual ~Vector2() {}
-
+    ~Vector2() {}
+    static uint8_t GetPropertyCount(){return 2; }
     /////////////////////////////// OPS /////////////////////////////////////
     Vector2 operator+ (const Vector2& other) const { return Vector2(this->x + other.x, this->y + other.y); }
     Vector2 operator- (const Vector2& other) const { return Vector2(this->x - other.x, this->y - other.y); }
